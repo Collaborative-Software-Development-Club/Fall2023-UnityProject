@@ -15,6 +15,10 @@ public abstract class Firearm : MonoBehaviour
     public double fireCooldown { get; set; }
     public FireType fireType { get; set; }
 
+// helper method 
+public double RPMtoCooldown(double rpm) {
+    return rpm / 60 / 60; 
+}
 
     void FixedUpdate()
     {
