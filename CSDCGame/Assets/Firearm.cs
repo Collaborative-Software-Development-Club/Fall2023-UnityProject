@@ -7,7 +7,7 @@ public abstract class Firearm : MonoBehaviour
 {
     // Projectile/magazine properties
     public GameObject projectile { get; set; }
-    public double speed { get; set; }
+    public float speed { get; set; }
     public int capacity { get; set; }
     private int projectilesRemaining;
 
@@ -33,7 +33,9 @@ public abstract class Firearm : MonoBehaviour
     {
         GameObject p = Instantiate(projectile, gameObject.transform.position, gameObject.transform.rotation);
         p.tag = "Projectile";
-        p.GetComponent<Rigidbody>().;
+        Vector3 force = p.transform.forward;
+        force.Scale(new Vector3(speed, speed, speed));
+        p.GetComponent<Rigidbody>().AddForce(force);
         return p;
     }
 
