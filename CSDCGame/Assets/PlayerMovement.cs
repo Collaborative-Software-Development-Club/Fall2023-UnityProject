@@ -106,3 +106,4 @@ public static class DebugPlayer { // debugging class
         Debug.DrawRay(playerPosition, angularVector, Color.cyan);
     }
 }
+    
