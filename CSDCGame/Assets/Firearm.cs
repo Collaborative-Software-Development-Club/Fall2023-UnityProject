@@ -49,4 +49,16 @@ public double RPMtoCooldown(double rpm) {
         Burst3,
         Auto
     }
+    void Start() {
+        WeaponStart();
+    }
+    void Update() {
+        WeaponUpdate();
+    }
+    protected virtual void WeaponUpdate() {
+
+    }
+    protected virtual void WeaponStart() {
+        
+    }
 }
