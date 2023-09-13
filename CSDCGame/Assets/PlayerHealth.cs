@@ -1,0 +1,44 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerHeath : MonoBehaviour
+{
+    public int startingHealth = 100; // initial health
+    public int currentHealth; // health changes if taken damage
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        currentHealth = startingHealth;
+    }
+
+    public void TakeDamage(int damageAmount)
+    {
+        currentHealth -= damageAmount;
+
+        if (currentHealth <= 0)
+        {
+            GameOver();
+        }
+        else
+        {
+            Debug.Log("Player took damage. Current health: " + currentHealth);
+        }
+
+    }
+
+    private void GameOver()
+    {
+        Debug.Log("Game Over - Player's health reached zero!");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Projectile"))
+        {
+            TakeDamage(1);
+        }
+    }
+    
+}
