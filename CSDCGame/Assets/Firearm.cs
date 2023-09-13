@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Transactions;
 using UnityEngine;
 
 
@@ -9,14 +10,32 @@ public abstract class Firearm : MonoBehaviour
     public GameObject projectile { get; set; }
     public float speed { get; set; }
     public int capacity { get; set; }
-    private int projectilesRemaining;
+    public int projectilesRemaining { get; set; }
 
-    // Firing properties
-    public double fireCooldown { get; set; }
+    // Firing speed properties
+    private double _fireCooldown = 0;
+    // fireRate and fireCooldown are both based on the _fireCooldown field.
+    /// <summary>
+    /// Fire rate of the weapon in times fired per second.
+    /// </summary>
+    public double fireRate
+    {
+        get { return 1 / _fireCooldown; }
+        set { _fireCooldown = 1 / value; }
+    }
+    /// <summary>
+    /// Cooldown between firing the weapon in seconds.
+    /// </summary>
+    public double fireCooldown
+    {
+        get { return _fireCooldown; }
+        set { _fireCooldown = value; }
+    }
+    // Other firing properties
     public FireType fireType { get; set; }
 
 
-    void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         if(Input.GetKey(KeyCode.Mouse0))
         {
@@ -29,7 +48,7 @@ public abstract class Firearm : MonoBehaviour
     /// </summary>
     /// <param name="projectile">The projectile to instantiate.</param>
     /// <returns>The projectile fired.</returns>
-    public GameObject ShootForward()
+    public virtual GameObject ShootForward()
     {
         GameObject p = Instantiate(projectile, gameObject.transform.position, gameObject.transform.rotation);
         p.tag = "Projectile";
