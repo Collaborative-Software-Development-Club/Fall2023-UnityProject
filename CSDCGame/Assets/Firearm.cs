@@ -4,7 +4,7 @@ using System.Transactions;
 using UnityEngine;
 
 
-public abstract class Firearm : MonoBehaviour
+public class Firearm : MonoBehaviour
 {
     // Projectile/magazine properties
     public GameObject projectile { get; set; }
