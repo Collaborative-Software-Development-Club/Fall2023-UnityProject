@@ -2,20 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthUIScript : MonoBehaviour
 {
-    private TextMeshProUGUI _text;
-    private PlayerHeath _pHealth;
+    public GameObject healthBar;
+    public PlayerHeath pHealth;
+    private Slider _healthSlider;
     void Start() {
-        _text = gameObject.GetComponent<TextMeshProUGUI>();
-        _pHealth = GameObject.Find("Player").GetComponent<PlayerHeath>();
-        if (_pHealth == null) {
-            Debug.LogError("ERROR: NO PLAYER OBJECT FOUND!");
+        _healthSlider = healthBar.GetComponent<Slider>();
+        if (_healthSlider == null) {
+            Debug.LogError("ERROR: HEALTH SLIDER NOT FOUND!");
         }
     }
     void Update()
     {
-        _text.text = "HP: " + _pHealth.currentHealth.ToString();
+        _healthSlider.value = pHealth.currentHealth / pHealth.startingHealth;
     }
 }
