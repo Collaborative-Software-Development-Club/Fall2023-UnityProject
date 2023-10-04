@@ -50,11 +50,12 @@ public class Firearm : MonoBehaviour
     /// The projectile variable is omitted, but still necessary.
     /// </summary>
     public virtual void GunSetup(float projectileSpeed, int capacity, int projectilesRemaining,
-        float fireCooldown, FireType fireType, float reloadTime)
+        float projectileLifetimeSecs, float fireCooldown, FireType fireType, float reloadTime)
     {
         this.projectileSpeed = projectileSpeed;
         this.capacity = capacity;
         this.projectilesRemaining = projectilesRemaining;
+        this.projectileLifetimeSecs = projectileLifetimeSecs;
         this.fireCooldown = fireCooldown;
         this.fireType = fireType;
         this.reloadTime = reloadTime;
@@ -64,9 +65,10 @@ public class Firearm : MonoBehaviour
     /// Helper method to easily set the variables needed for the firearm to function.
     /// </summary>
     public virtual void GunSetup(float speed, int capacity, int projectilesRemaining,
-        float fireCooldown, FireType fireType, float reloadTime, GameObject projectile)
+        float projectileLifetimeSecs, float fireCooldown, FireType fireType, float reloadTime,
+        GameObject projectile)
     {
-        GunSetup(speed, capacity, projectilesRemaining, fireCooldown, fireType, reloadTime);
+        GunSetup(speed, capacity, projectilesRemaining, projectileLifetimeSecs, fireCooldown, fireType, reloadTime);
         this.projectile = projectile;
     }
 
