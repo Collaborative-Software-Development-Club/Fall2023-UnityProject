@@ -39,6 +39,7 @@ public class PauseScript : MonoBehaviour
         gameUI.SetActive(!_isPaused);
     }
     public void QuitGame() {
-        // TODO: QUIT GAME HERE
+        //Debug.Log("Quitting!");
+        Application.Quit();
     }
 }
