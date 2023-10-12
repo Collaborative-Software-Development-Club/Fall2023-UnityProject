@@ -12,19 +12,19 @@ public class AgentMovement : MonoBehaviour
     public float pathfindingDelay = 0.2f;
     public float targetShootingBound =  3f; // when target is within this bound, shoot
     public float targetRetreatBound = 3f; // when target gets to this value, retreat
-    public Transform playerTransform;
     public float distanceBuffer = 0.2f;
     public float maxDistance = 15f;
     private float _updateDeadline = 0f;
-    [Header("Shooting")]
-    public Transform emissionPoint;
-    public GameObject bulletPrefab;
-    public float fireRateInSeconds = 0.5f;
-    public float bulletSpeed = 10f;
-    private bool _canShoot = true;
+    //[Header("Shooting")]
+    //public Transform emissionPoint;
+    //public GameObject bulletPrefab;
+    //public float fireRateInSeconds = 0.5f;
+    //public float bulletSpeed = 10f;
+    //private bool _canShoot = true;
+    public Firearm firearm;
 
     void Update() {
-        float distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);
+        float distanceToPlayer = Vector3.Distance(GetPlayerTransform().position, transform.position);
         Debug.DrawRay(transform.position, transform.forward, Color.white);
         if (distanceToPlayer <= targetShootingBound && CanSeePlayer()) {
             agent.isStopped = true;
@@ -34,12 +34,17 @@ public class AgentMovement : MonoBehaviour
                 agent.isStopped = false;
                 Retreat();
             }
-            Shoot();
+            firearm.ShootForward();
         }
         else { // if not, keep moving towards player
             agent.isStopped = false;
-            UpdatePath(playerTransform.position);
+            UpdatePath(GetPlayerTransform().position);
         }
+    }
+
+    private Transform GetPlayerTransform()
+    {
+        return transform.parent.GetComponent<EnemyController>().playerTransform;
     }
 
     /// <summary>
@@ -58,22 +63,9 @@ public class AgentMovement : MonoBehaviour
     /// Rotates agent towards the player
     /// </summary>
     private void RotateToPlayer() {
-        Vector3 vectorToPlayer = transform.position - playerTransform.position;
+        Vector3 vectorToPlayer = transform.position - GetPlayerTransform().position;
         float angle = XZRotationConversion.Vector3ToAngle(vectorToPlayer);
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, -angle + 180f, transform.rotation.eulerAngles.z);
-    }
-
-    /// <summary>
-    /// Shoots a bullet at a rate of 'fireRateInSeconds'
-    /// </summary>
-    private void Shoot() {
-        if (_canShoot) {
-        GameObject newBullet = Instantiate(bulletPrefab, emissionPoint.transform.position, Quaternion.identity);
-        Vector3 rayDirection = transform.forward;
-        Rigidbody bulletRigidbody = newBullet.GetComponent<Rigidbody>();
-        StartCoroutine(BulletCooldown());
-        bulletRigidbody.AddForce(rayDirection * bulletSpeed, ForceMode.Impulse);
-        }
     }
 
     /// <summary>
@@ -84,7 +76,7 @@ public class AgentMovement : MonoBehaviour
         bool canSee = false;
         Ray ray = new Ray();
         ray.origin = transform.position;
-        ray.direction = playerTransform.position - transform.position;
+        ray.direction = GetPlayerTransform().position - transform.position;
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             if (hit.collider.tag.Equals("Player")) canSee = true;
@@ -97,7 +89,7 @@ public class AgentMovement : MonoBehaviour
     /// </summary>
     private void Retreat() {
         Vector3 pointToCheck; // The point you want to check
-        Vector3 forwardUnit = playerTransform.forward * distanceBuffer;
+        Vector3 forwardUnit = GetPlayerTransform().forward * distanceBuffer;
         Vector3 retreatPosition = transform.position;
         pointToCheck.y = 0.12f;
         NavMeshHit hit;
@@ -110,16 +102,6 @@ public class AgentMovement : MonoBehaviour
         }
         Debug.DrawRay(transform.position, retreatPosition, Color.magenta);
         UpdatePath(retreatPosition);
-    }
-
-    /// <summary>
-    /// Enumerator that switches bool after a variable number of seconds.
-    /// </summary>
-    /// <returns> Enumerator; Returns nothing. Serves to wait </returns>
-    private IEnumerator BulletCooldown() {
-        _canShoot = false;
-        yield return new WaitForSeconds(fireRateInSeconds);
-        _canShoot = true;
     }
 }
 public static class XZRotationConversion { // angle-vector conversion nonsense because im tired of doing it 20,000 times
