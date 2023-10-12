@@ -10,7 +10,7 @@ public class Firearm : MonoBehaviour
     public int capacity;
     public int projectilesRemaining;
     [InspectorName("Projectile Lifetime (seconds)")]
-    public float projectileLifetimeSecs;
+    public float projectileLifetimeSecs = 5f;
 
     // Firing speed properties
     public float _fireCooldown = 0;
@@ -81,13 +81,7 @@ public double RPMtoCooldown(double rpm) {
     {
         if(Input.GetKey(KeyCode.Mouse0))
         {
-            if (!inFireCooldown && !inReloadCooldown && projectilesRemaining > 0)
-            {
-                // Results in default behavior of full-auto.
-                StartCoroutine(FireCooldown());
-                ShootForward();
-                projectilesRemaining--;
-            }
+            ShootForward();
         }
         if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.Mouse1))
         {
@@ -106,29 +100,43 @@ public double RPMtoCooldown(double rpm) {
     }
 
     /// <summary>
-    /// Create a new projectile and fire it along this object's parent's (typically the player) forward vector. Start at the this object's origin.
+    /// Fires iff the firearm is not in cooldown, reloading, or out of ammo. Creates a new projectile and fire it along this object's parent's (typically the player) forward vector. Start at the this object's origin.
     /// </summary>
     /// <param name="projectile">The projectile to instantiate.</param>
-    /// <returns>The projectile fired.</returns>
+    /// <returns>The projectile fired or <see langword="null"/> if firing was not legal.</returns>
     public virtual GameObject ShootForward()
     {
         return Shoot(transform.parent.forward);
     }
 
+    /// <summary>
+    /// Fires iff the firearm is not in cooldown, reloading, or out of ammo. Creates a new projectile and fire it along this object's parent's (typically the player) forward vector. Start at the this object's origin.
+    /// </summary>
+    /// <param name="direction">The vector to shoot along.</param>
+    /// <returns>The projectile fired or <see langword="null"/> if firing was not legal.</returns>
     public virtual GameObject Shoot(Vector3 direction)
     {
-        // Create new projectile with this object's position and rotation.
-        GameObject p = Instantiate(projectile, transform.position, transform.rotation);
-        // Because Quinton said so.
-        p.tag = "Projectile";
-        // Scale up direction vector to the projectile's speed.
-        direction.Scale(new Vector3(projectileSpeed, projectileSpeed, projectileSpeed));
-        // Set velocity of projectile.
-        p.GetComponent<Rigidbody>().AddForce(direction, ForceMode.VelocityChange);
-        // Set projectile to despawn after its lifetime is over (according to projectileLifetimeSecs).
-        SetProjectileDespawn(p);
-        // Return projectile created.
-        return p;
+        //Debug.Log(!inFireCooldown + " " + !inReloadCooldown + " " + (projectilesRemaining > 0));
+        if (!inFireCooldown && !inReloadCooldown && projectilesRemaining > 0)
+        {
+            // Results in default behavior of full-auto.
+
+            projectilesRemaining--;
+            StartCoroutine(FireCooldown());
+            // Create new projectile with this object's position and rotation.
+            GameObject p = Instantiate(projectile, transform.position, transform.rotation);
+            // Because Quinton said so.
+            p.tag = "Projectile";
+            // Scale up direction vector to the projectile's speed.
+            direction.Scale(new Vector3(projectileSpeed, projectileSpeed, projectileSpeed));
+            // Set velocity of projectile.
+            p.GetComponent<Rigidbody>().AddForce(direction, ForceMode.VelocityChange);
+            // Set projectile to despawn after its lifetime is over (according to projectileLifetimeSecs).
+            SetProjectileDespawn(p);
+            // Return projectile created.
+            return p;
+        }
+        return null;
     }
 
     public virtual void SetProjectileDespawn(GameObject projectile)
