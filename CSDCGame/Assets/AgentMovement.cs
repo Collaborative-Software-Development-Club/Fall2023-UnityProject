@@ -99,12 +99,12 @@ public class AgentMovement : MonoBehaviour
         Vector3 pointToCheck; // The point you want to check
         Vector3 forwardUnit = playerTransform.forward * distanceBuffer;
         Vector3 retreatPosition = transform.position;
-        pointToCheck.y = 0.12f;
+        pointToCheck.y = 0.08f;
         NavMeshHit hit;
         for (int f = 0; f < maxDistance; f++) {
             pointToCheck.x = transform.position.x + (forwardUnit.x + (forwardUnit.x * f));
             pointToCheck.z = transform.position.z + (forwardUnit.z + (forwardUnit.z * f));
-            if (NavMesh.SamplePosition(pointToCheck, out hit, 0.05f, NavMesh.AllAreas)) {
+            if (NavMesh.SamplePosition(pointToCheck, out hit, 0.01f, NavMesh.AllAreas)) {
             retreatPosition = hit.position;
             }
         }
