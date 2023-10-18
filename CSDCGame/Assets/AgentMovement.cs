@@ -33,12 +33,18 @@ public class AgentMovement : MonoBehaviour
             if (distanceToPlayer <= targetRetreatBound) { // if so... retreat while shooting!
                 agent.isStopped = false;
                 Retreat();
+                Debug.Log("Retreating...");
             }
             Shoot();
         }
-        else { // if not, keep moving towards player
+        else if (distanceToPlayer >= targetShootingBound && CanSeePlayer()) {// if not, keep moving towards player
             agent.isStopped = false;
             UpdatePath(playerTransform.position);
+            Debug.Log("Moving towards player...");
+
+        }
+        else { 
+
         }
     }
 
@@ -96,21 +102,18 @@ public class AgentMovement : MonoBehaviour
     /// Allows the agent to retreat away from the player's forward vector
     /// </summary>
     private void Retreat() {
-        Vector3 pointToCheck; // The point you want to check
-        Vector3 forwardUnit = playerTransform.forward * distanceBuffer;
-        Vector3 retreatPosition = transform.position;
-        pointToCheck.y = 0.08f;
+    float distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);
+    Vector3 retreatDirection = (transform.position - playerTransform.position).normalized;
+
+    if (distanceToPlayer <= targetRetreatBound) {
+        Vector3 retreatPosition = playerTransform.position + retreatDirection * (targetRetreatBound + distanceBuffer);
         NavMeshHit hit;
-        for (int f = 0; f < maxDistance; f++) {
-            pointToCheck.x = transform.position.x + (forwardUnit.x + (forwardUnit.x * f));
-            pointToCheck.z = transform.position.z + (forwardUnit.z + (forwardUnit.z * f));
-            if (NavMesh.SamplePosition(pointToCheck, out hit, 0.01f, NavMesh.AllAreas)) {
-            retreatPosition = hit.position;
-            }
+
+        if (NavMesh.SamplePosition(retreatPosition, out hit, maxDistance, NavMesh.AllAreas)) {
+            UpdatePath(hit.position);
         }
-        Debug.DrawRay(transform.position, retreatPosition, Color.magenta);
-        UpdatePath(retreatPosition);
     }
+}
 
     /// <summary>
     /// Enumerator that switches bool after a variable number of seconds.
