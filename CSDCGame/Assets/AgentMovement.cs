@@ -33,14 +33,12 @@ public class AgentMovement : MonoBehaviour
             if (distanceToPlayer <= targetRetreatBound) { // if so... retreat while shooting!
                 agent.isStopped = false;
                 Retreat();
-                Debug.Log("Retreating...");
             }
             Shoot();
         }
         else if (distanceToPlayer >= targetShootingBound && CanSeePlayer()) {// if not, keep moving towards player
             agent.isStopped = false;
             UpdatePath(playerTransform.position);
-            Debug.Log("Moving towards player...");
 
         }
         else { 
