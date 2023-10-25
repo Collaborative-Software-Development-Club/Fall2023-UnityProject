@@ -44,6 +44,8 @@ public class Firearm : MonoBehaviour
     /// Track whether the firearm is being reloaded.
     /// </summary>
     private bool inReloadCooldown = false;
+    public AudioSource bulletSound;
+    public AudioSource reload;
 
     /// <summary>
     /// Helper method to easily set the variables needed for the firearm to function.
@@ -87,11 +89,13 @@ public double RPMtoCooldown(double rpm) {
                 StartCoroutine(FireCooldown());
                 ShootForward();
                 projectilesRemaining--;
+                bulletSound.Play();
             }
         }
         if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.Mouse1))
         {
             Reload();
+            reload.Play();
         }
     }
 
