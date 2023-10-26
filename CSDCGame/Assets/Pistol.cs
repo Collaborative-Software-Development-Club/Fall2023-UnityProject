@@ -8,7 +8,7 @@ public class Pistol : Firearm
 
     // Projectile/magazine properties
 
-    private int projectilesRemaining;
+    private new int projectilesRemaining;
 
     protected override void WeaponStart() {
         Debug.Log("starting");

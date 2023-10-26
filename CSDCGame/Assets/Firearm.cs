@@ -6,8 +6,6 @@ public class Firearm : MonoBehaviour
 {
     // Projectile/magazine properties
     public GameObject projectile;
-    public float projectileSpeed;
-    public int capacity;
     public int projectilesRemaining;
     [InspectorName("Projectile Lifetime (seconds)")]
     public float projectileLifetimeSecs;
@@ -46,33 +44,65 @@ public class Firearm : MonoBehaviour
     private bool inReloadCooldown = false;
     public AudioSource bulletSound;
     public AudioSource reload;
+    private Weapon w;
+
+    private struct Weapon {
+        public float reloadTime;
+        public float projectileSpeed;
+        public int capacity;
+
+    }
+
+    void Start() {
+        w = new Weapon();
+        switch (fireType) {
+            case FireType.Single:
+            w.reloadTime = 1.25f;
+            w.capacity = 7;
+            w.projectileSpeed = 30;
+            break;
+            case FireType.Burst3:
+            w.reloadTime = 2;
+            w.capacity = 5;
+            w.projectileSpeed = 10;
+            break;
+            case FireType.Auto:
+            w.reloadTime = 1.5f;
+            w.capacity = 20;
+            w.projectileSpeed = 20;
+            break;
+            default:
+            break;
+        }
+        WeaponStart();
+    }
 
     /// <summary>
     /// Helper method to easily set the variables needed for the firearm to function.
     /// The projectile variable is omitted, but still necessary.
     /// </summary>
-    public virtual void GunSetup(float projectileSpeed, int capacity, int projectilesRemaining,
-        float projectileLifetimeSecs, float fireCooldown, FireType fireType, float reloadTime)
-    {
-        this.projectileSpeed = projectileSpeed;
-        this.capacity = capacity;
-        this.projectilesRemaining = projectilesRemaining;
-        this.projectileLifetimeSecs = projectileLifetimeSecs;
-        this.fireCooldown = fireCooldown;
-        this.fireType = fireType;
-        this.reloadTime = reloadTime;
-    }
+    // public virtual void GunSetup(float projectileSpeed, int capacity, int projectilesRemaining,
+    //     float projectileLifetimeSecs, float fireCooldown, FireType fireType, float reloadTime)
+    // {
+    //     this.projectileSpeed = projectileSpeed;
+    //     this.capacity = capacity;
+    //     this.projectilesRemaining = projectilesRemaining;
+    //     this.projectileLifetimeSecs = projectileLifetimeSecs;
+    //     this.fireCooldown = fireCooldown;
+    //     this.fireType = fireType;
+    //     this.reloadTime = reloadTime;
+    // }
 
     /// <summary>
     /// Helper method to easily set the variables needed for the firearm to function.
     /// </summary>
-    public virtual void GunSetup(float speed, int capacity, int projectilesRemaining,
-        float projectileLifetimeSecs, float fireCooldown, FireType fireType, float reloadTime,
-        GameObject projectile)
-    {
-        GunSetup(speed, capacity, projectilesRemaining, projectileLifetimeSecs, fireCooldown, fireType, reloadTime);
-        this.projectile = projectile;
-    }
+    // public virtual void GunSetup(float speed, int capacity, int projectilesRemaining,
+    //     float projectileLifetimeSecs, float fireCooldown, FireType fireType, float reloadTime,
+    //     GameObject projectile)
+    // {
+    //     GunSetup(speed, capacity, projectilesRemaining, projectileLifetimeSecs, fireCooldown, fireType, reloadTime);
+    //     this.projectile = projectile;
+    // }
 
 // helper method 
 public double RPMtoCooldown(double rpm) {
@@ -126,7 +156,7 @@ public double RPMtoCooldown(double rpm) {
         // Because Quinton said so.
         p.tag = "Projectile";
         // Scale up direction vector to the projectile's speed.
-        direction.Scale(new Vector3(projectileSpeed, projectileSpeed, projectileSpeed));
+        direction.Scale(new Vector3(w.projectileSpeed, w.projectileSpeed, w.projectileSpeed));
         // Set velocity of projectile.
         p.GetComponent<Rigidbody>().AddForce(direction, ForceMode.VelocityChange);
         // Set projectile to despawn after its lifetime is over (according to projectileLifetimeSecs).
@@ -157,7 +187,7 @@ public double RPMtoCooldown(double rpm) {
         inReloadCooldown = true;
         yield return new WaitForSeconds(reloadTime);
         inReloadCooldown = false;
-        projectilesRemaining = capacity;
+        projectilesRemaining = w.capacity;
     }
 
     public enum FireType
@@ -165,9 +195,6 @@ public double RPMtoCooldown(double rpm) {
         Single,
         Burst3,
         Auto
-    }
-    void Start() {
-        WeaponStart();
     }
     void Update() {
         WeaponUpdate();
