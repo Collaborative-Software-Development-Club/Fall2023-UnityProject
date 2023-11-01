@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Windows;
 
 
 public class Firearm : MonoBehaviour
@@ -44,6 +45,7 @@ public class Firearm : MonoBehaviour
     private bool inReloadCooldown = false;
     public AudioSource bulletSound;
     public AudioSource reload;
+    [HideInInspector] public int globalCapacity;
     private Weapon w;
 
     private struct Weapon {
@@ -67,13 +69,15 @@ public class Firearm : MonoBehaviour
             w.projectileSpeed = 10;
             break;
             case FireType.Auto:
-            w.reloadTime = 1.5f;
+            w.reloadTime = 2f;
             w.capacity = 20;
             w.projectileSpeed = 20;
             break;
             default:
             break;
         }
+        projectilesRemaining = w.capacity;
+        globalCapacity = w.capacity;
         WeaponStart();
     }
 
@@ -111,7 +115,9 @@ public double RPMtoCooldown(double rpm) {
 
     public virtual void FixedUpdate()
     {
-        if(Input.GetKey(KeyCode.Mouse0))
+        bool keyDown = UnityEngine.Input.GetKeyDown(KeyCode.Mouse0);
+        if (fireType == FireType.Auto && UnityEngine.Input.GetKey(KeyCode.Mouse0)) keyDown = true;
+        if(keyDown)
         {
             if (!inFireCooldown && !inReloadCooldown && projectilesRemaining > 0)
             {
@@ -122,7 +128,7 @@ public double RPMtoCooldown(double rpm) {
                 bulletSound.Play();
             }
         }
-        if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.Mouse1))
+        if (UnityEngine.Input.GetKey(KeyCode.R) || UnityEngine.Input.GetKey(KeyCode.Mouse1))
         {
             Reload();
             reload.Play();
@@ -153,8 +159,6 @@ public double RPMtoCooldown(double rpm) {
     {
         // Create new projectile with this object's position and rotation.
         GameObject p = Instantiate(projectile, transform.position, transform.rotation);
-        // Because Quinton said so.
-        p.tag = "Projectile";
         // Scale up direction vector to the projectile's speed.
         direction.Scale(new Vector3(w.projectileSpeed, w.projectileSpeed, w.projectileSpeed));
         // Set velocity of projectile.

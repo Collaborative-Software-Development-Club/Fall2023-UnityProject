@@ -99,7 +99,7 @@ public class AgentMovement : MonoBehaviour
     /// </summary>
     private void Retreat() {
         Vector3 pointToCheck; // The point you want to check
-        Vector3 forwardUnit = playerTransform.forward * distanceBuffer;
+        Vector3 forwardUnit = (transform.position - playerTransform.position) * distanceBuffer;
         Vector3 retreatPosition = transform.position;
         pointToCheck.y = 0.08f;
         NavMeshHit hit;

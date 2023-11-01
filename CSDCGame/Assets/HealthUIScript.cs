@@ -17,6 +17,6 @@ public class HealthUIScript : MonoBehaviour
     }
     void Update()
     {
-        _healthSlider.value = pHealth.currentHealth / pHealth.startingHealth;
+        _healthSlider.value = (float) pHealth.currentHealth / pHealth.startingHealth;
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerHeath : MonoBehaviour
 {
     public int startingHealth = 100; // initial health
-    public int currentHealth; // health changes if taken damage
+    [HideInInspector] public int currentHealth; // health changes if taken damage
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +23,7 @@ public class PlayerHeath : MonoBehaviour
         }
         else
         {
-            Debug.Log("Player took damage. Current health: " + currentHealth);
+            //Debug.Log("Player took damage. Current health: " + currentHealth);
         }
 
     }
@@ -33,9 +33,9 @@ public class PlayerHeath : MonoBehaviour
         Debug.Log("Game Over - Player's health reached zero!");
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision col)
     {
-        if (other.CompareTag("Projectile"))
+        if (col.transform.tag == "Projectile")
         {
             TakeDamage(1);
         }
