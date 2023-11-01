@@ -22,6 +22,7 @@ public class AgentMovement : MonoBehaviour
     public float fireRateInSeconds = 0.5f;
     public float bulletSpeed = 10f;
     private bool _canShoot = true;
+    public AudioSource bulletSound;
 
     void Update() {
         float distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);
@@ -77,6 +78,7 @@ public class AgentMovement : MonoBehaviour
         Rigidbody bulletRigidbody = newBullet.GetComponent<Rigidbody>();
         StartCoroutine(BulletCooldown());
         bulletRigidbody.AddForce(rayDirection * bulletSpeed, ForceMode.Impulse);
+            bulletSound.Play();
         }
     }
 
