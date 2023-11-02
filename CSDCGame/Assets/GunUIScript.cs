@@ -19,6 +19,6 @@ public class GunUIScript : MonoBehaviour
 
     void Update()
     {
-        _text.text = "[" + playerFirearmScript.fireType.ToString().ToUpper() + "] " + playerFirearmScript.projectilesRemaining + "/" + playerFirearmScript.capacity;
+        _text.text = "[" + playerFirearmScript.fireType.ToString().ToUpper() + "] " + playerFirearmScript.projectilesRemaining + "/" + playerFirearmScript.globalCapacity;
     }
 }

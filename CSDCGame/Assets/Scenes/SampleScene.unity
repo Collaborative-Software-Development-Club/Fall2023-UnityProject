@@ -23475,15 +23475,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectile: {fileID: 7293466657194045248, guid: ca59cdc54c507e24dbfb65a6dae1d00f, type: 3}
-  projectileSpeed: 10
-  capacity: 5
   projectilesRemaining: 5
   projectileLifetimeSecs: 10
   _fireCooldown: 0.5
-  fireType: 0
+  fireType: 2
   reloadTime: 1.25
   bulletSound: {fileID: 1328796966}
   reload: {fileID: 1328796967}
+  globalCapacity: 0
 --- !u!82 &1328796966
 AudioSource:
   m_ObjectHideFlags: 0
@@ -36058,7 +36057,7 @@ MonoBehaviour:
   emissionPoint: {fileID: 1023807860}
   bulletPrefab: {fileID: 7293466657194045248, guid: ca59cdc54c507e24dbfb65a6dae1d00f, type: 3}
   fireRateInSeconds: 2
-  bulletSpeed: 50
+  bulletSpeed: 100
   bulletSound: {fileID: 2077621880}
 --- !u!136 &2077621874
 CapsuleCollider:
