@@ -23478,7 +23478,7 @@ MonoBehaviour:
   projectilesRemaining: 5
   projectileLifetimeSecs: 10
   _fireCooldown: 0.5
-  fireType: 2
+  fireType: 1
   reloadTime: 1.25
   bulletSound: {fileID: 1328796966}
   reload: {fileID: 1328796967}
