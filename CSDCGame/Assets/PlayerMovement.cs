@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
             //Debug.Log("The angle is " + angle);
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, -angle, transform.rotation.eulerAngles.z);
             
-            Debug.DrawRay(transform.position, rayDirection, Color.green);
+            //Debug.DrawRay(transform.position, rayDirection, Color.green);
         }
     }
 

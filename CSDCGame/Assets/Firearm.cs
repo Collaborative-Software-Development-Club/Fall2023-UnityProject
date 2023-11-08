@@ -1,4 +1,6 @@
 using System.Collections;
+using TreeEditor;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Windows;
 
@@ -23,14 +25,6 @@ public class Firearm : MonoBehaviour
         set { _fireCooldown = 1 / value; }
     }
     /// <summary>
-    /// Cooldown between firing the weapon in seconds.
-    /// </summary>
-    public float fireCooldown
-    {
-        get { return _fireCooldown; }
-        set { _fireCooldown = value; }
-    }
-    /// <summary>
     /// Track whether the firearm is in-between shots.
     /// </summary>
     private bool inFireCooldown = false;
@@ -45,13 +39,17 @@ public class Firearm : MonoBehaviour
     private bool inReloadCooldown = false;
     public AudioSource bulletSound;
     public AudioSource reload;
+    public GameObject shotgunEmitter1;
+    public GameObject shotgunEmitter2;
     [HideInInspector] public int globalCapacity;
     private Weapon w;
+    private bool keyDown = false;
 
     private struct Weapon {
         public float reloadTime;
         public float projectileSpeed;
         public int capacity;
+        public float cooldown;
 
     }
 
@@ -62,61 +60,40 @@ public class Firearm : MonoBehaviour
             w.reloadTime = 1.25f;
             w.capacity = 7;
             w.projectileSpeed = 30;
+            w.cooldown = 0.5f;
             break;
             case FireType.Burst3:
             w.reloadTime = 2;
             w.capacity = 5;
             w.projectileSpeed = 10;
+            w.cooldown = 1;
             break;
             case FireType.Auto:
             w.reloadTime = 2f;
             w.capacity = 20;
             w.projectileSpeed = 20;
+            w.cooldown = 0.2f;
             break;
             default:
             break;
         }
         projectilesRemaining = w.capacity;
         globalCapacity = w.capacity;
-        WeaponStart();
     }
-
-    /// <summary>
-    /// Helper method to easily set the variables needed for the firearm to function.
-    /// The projectile variable is omitted, but still necessary.
-    /// </summary>
-    // public virtual void GunSetup(float projectileSpeed, int capacity, int projectilesRemaining,
-    //     float projectileLifetimeSecs, float fireCooldown, FireType fireType, float reloadTime)
-    // {
-    //     this.projectileSpeed = projectileSpeed;
-    //     this.capacity = capacity;
-    //     this.projectilesRemaining = projectilesRemaining;
-    //     this.projectileLifetimeSecs = projectileLifetimeSecs;
-    //     this.fireCooldown = fireCooldown;
-    //     this.fireType = fireType;
-    //     this.reloadTime = reloadTime;
-    // }
-
-    /// <summary>
-    /// Helper method to easily set the variables needed for the firearm to function.
-    /// </summary>
-    // public virtual void GunSetup(float speed, int capacity, int projectilesRemaining,
-    //     float projectileLifetimeSecs, float fireCooldown, FireType fireType, float reloadTime,
-    //     GameObject projectile)
-    // {
-    //     GunSetup(speed, capacity, projectilesRemaining, projectileLifetimeSecs, fireCooldown, fireType, reloadTime);
-    //     this.projectile = projectile;
-    // }
 
 // helper method 
 public double RPMtoCooldown(double rpm) {
     return rpm / 60 / 60; 
 }
 
+void Update() {
+    keyDown = UnityEngine.Input.GetKeyDown(KeyCode.Mouse0);
+    if (fireType == FireType.Auto && UnityEngine.Input.GetKey(KeyCode.Mouse0)) keyDown = true;
+}
+
     public virtual void FixedUpdate()
     {
-        bool keyDown = UnityEngine.Input.GetKeyDown(KeyCode.Mouse0);
-        if (fireType == FireType.Auto && UnityEngine.Input.GetKey(KeyCode.Mouse0)) keyDown = true;
+        
         if(keyDown)
         {
             if (!inFireCooldown && !inReloadCooldown && projectilesRemaining > 0)
@@ -141,7 +118,7 @@ public double RPMtoCooldown(double rpm) {
     private IEnumerator FireCooldown()
     {
         inFireCooldown = true;
-        yield return new WaitForSeconds(fireCooldown);
+        yield return new WaitForSeconds(w.cooldown);
         inFireCooldown = false;
     }
 
@@ -152,18 +129,18 @@ public double RPMtoCooldown(double rpm) {
     /// <returns>The projectile fired.</returns>
     public void ShootForward()
     {
-        Shoot(transform.parent.forward);
+        Shoot(transform.parent.forward, transform.position);
         if (fireType == FireType.Burst3) {
             Vector2 parentV2 = new Vector2(transform.parent.forward.x, transform.parent.forward.z);
-            Shoot(RotateVector(parentV2, -10));
-            Shoot(RotateVector(parentV2, 10));
+            Shoot(RotateVector(parentV2, -10), shotgunEmitter2.transform.position);
+            Shoot(RotateVector(parentV2, 10), shotgunEmitter1.transform.position);
         }
     }
 
-    public virtual GameObject Shoot(Vector3 direction)
+    public virtual GameObject Shoot(Vector3 direction, Vector3 position)
     {
         // Create new projectile with this object's position and rotation.
-        GameObject p = Instantiate(projectile, transform.position, transform.rotation);
+        GameObject p = Instantiate(projectile, position, Quaternion.identity);
         // Scale up direction vector to the projectile's speed.
         direction.Scale(new Vector3(w.projectileSpeed, w.projectileSpeed, w.projectileSpeed));
         // Set velocity of projectile.
@@ -204,15 +181,6 @@ public double RPMtoCooldown(double rpm) {
         Single,
         Burst3,
         Auto
-    }
-    void Update() {
-        WeaponUpdate();
-    }
-    protected virtual void WeaponUpdate() {
-
-    }
-    protected virtual void WeaponStart() {
-        
     }
 
     Vector3 RotateVector(Vector2 vector, float degrees)
