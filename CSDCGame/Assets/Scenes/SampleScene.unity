@@ -27594,8 +27594,8 @@ MonoBehaviour:
   rb: {fileID: 1578215836}
   movementSpeed: 10
   moveType: 1
-  headObject: {fileID: 2069032773629648373}
-  bodyObject: {fileID: 4150323895818200469}
+  headObject: {fileID: 4150323895818200469}
+  bodyObject: {fileID: 3173762638713523491}
 --- !u!136 &1578215838
 CapsuleCollider:
   m_ObjectHideFlags: 0
