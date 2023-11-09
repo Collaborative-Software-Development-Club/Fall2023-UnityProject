@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
         Normal, IsoAdjusted
     }
     public MovementType moveType; // use normal for debug, iso-adjust for default movement
+    public GameObject headObject;
+    public GameObject bodyObject;
     private Vector3 _inputVector;
     private RaycastHit _aimData;
     void Update()
@@ -39,15 +41,12 @@ public class PlayerMovement : MonoBehaviour
         if (_inputVector.magnitude != 0) {
         switch (moveType) {
             case MovementType.Normal: // normal movement
-
             rb.velocity = new Vector3(_inputVector.x * movementSpeed, 0f, _inputVector.z * movementSpeed);
-            
             break;
             case MovementType.IsoAdjusted: // moves at 45 degree angle
-           
             Vector3 skewedMove = IsoMatrixHelper.GetNormalizedIsoInputVector(_inputVector);
             rb.velocity = skewedMove * movementSpeed;
-
+            //bodyObject.transform.eulerAngles = new Vector3(bodyObject.transform.eulerAngles.x, Mathf.Atan(skewedMove.z / skewedMove.x), bodyObject.transform.eulerAngles.z);
             break;
         }
         }
@@ -65,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
             Vector3 rayDirection = _aimData.point - transform.position; // returns the direction fo the ray; essentially the mouse position.
             float angle = Mathf.Atan2(rayDirection.z, rayDirection.x) * Mathf.Rad2Deg - 90f;
             //Debug.Log("The angle is " + angle);
-            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, -angle, transform.rotation.eulerAngles.z);
+            headObject.transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, -angle, transform.rotation.eulerAngles.z);
             
             //Debug.DrawRay(transform.position, rayDirection, Color.green);
         }

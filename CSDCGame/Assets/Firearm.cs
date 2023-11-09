@@ -91,10 +91,8 @@ void Update() {
     if (fireType == FireType.Auto && UnityEngine.Input.GetKey(KeyCode.Mouse0)) keyDown = true;
     if(keyDown)
         {
-            Debug.Log("The key is down");
             if (!inFireCooldown && !inReloadCooldown && projectilesRemaining > 0)
             {
-                Debug.Log("It can fire.");
                 // Results in default behavior of full-auto.
                 StartCoroutine(FireCooldown());
                 ShootForward();
