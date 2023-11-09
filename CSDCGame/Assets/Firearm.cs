@@ -89,15 +89,12 @@ public double RPMtoCooldown(double rpm) {
 void Update() {
     keyDown = UnityEngine.Input.GetKeyDown(KeyCode.Mouse0);
     if (fireType == FireType.Auto && UnityEngine.Input.GetKey(KeyCode.Mouse0)) keyDown = true;
-}
-
-    public virtual void FixedUpdate()
-    {
-        
-        if(keyDown)
+    if(keyDown)
         {
+            Debug.Log("The key is down");
             if (!inFireCooldown && !inReloadCooldown && projectilesRemaining > 0)
             {
+                Debug.Log("It can fire.");
                 // Results in default behavior of full-auto.
                 StartCoroutine(FireCooldown());
                 ShootForward();
@@ -110,7 +107,7 @@ void Update() {
             Reload();
             reload.Play();
         }
-    }
+}
 
     /// <summary>
     /// Coroutine for adding delay between shots.
