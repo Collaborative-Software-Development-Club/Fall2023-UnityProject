@@ -150,9 +150,14 @@ public double RPMtoCooldown(double rpm) {
     /// </summary>
     /// <param name="projectile">The projectile to instantiate.</param>
     /// <returns>The projectile fired.</returns>
-    public virtual GameObject ShootForward()
+    public void ShootForward()
     {
-        return Shoot(transform.parent.forward);
+        Shoot(transform.parent.forward);
+        if (fireType == FireType.Burst3) {
+            Vector2 parentV2 = new Vector2(transform.parent.forward.x, transform.parent.forward.z);
+            Shoot(RotateVector(parentV2, -10));
+            Shoot(RotateVector(parentV2, 10));
+        }
     }
 
     public virtual GameObject Shoot(Vector3 direction)
@@ -208,5 +213,17 @@ public double RPMtoCooldown(double rpm) {
     }
     protected virtual void WeaponStart() {
         
+    }
+
+    Vector3 RotateVector(Vector2 vector, float degrees)
+    {
+        // Convert degrees to radians
+        float radians = degrees * Mathf.Deg2Rad;
+
+        // Perform the rotation using trigonometric functions
+        float newX = vector.x * Mathf.Cos(radians) - vector.y * Mathf.Sin(radians);
+        float newY = vector.x * Mathf.Sin(radians) + vector.y * Mathf.Cos(radians);
+
+        return new Vector3(newX, 0, newY);
     }
 }
