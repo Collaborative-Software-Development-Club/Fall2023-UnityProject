@@ -46,9 +46,8 @@ public class PlayerMovement : MonoBehaviour
             case MovementType.IsoAdjusted: // moves at 45 degree angle
             Vector3 skewedMove = IsoMatrixHelper.GetNormalizedIsoInputVector(_inputVector);
             rb.velocity = skewedMove * movementSpeed;
-            Debug.DrawLine(transform.position, transform.position+skewedMove);
             float moveAngle = Mathf.Atan2(skewedMove.z, skewedMove.x)* Mathf.Rad2Deg;
-            if ((int)(moveAngle) % 10 == 0) bodyObject.transform.localEulerAngles = new Vector3(0, 0, moveAngle - 90);
+            if ((int)moveAngle % 10 == 0) bodyObject.transform.localEulerAngles = new Vector3(0, 0, moveAngle - 90);
             else bodyObject.transform.localEulerAngles = new Vector3(0, 0, moveAngle);
             break;
         }
