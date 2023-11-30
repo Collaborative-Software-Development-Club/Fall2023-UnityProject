@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHeath : MonoBehaviour
+public class PlayerHealth : MonoBehaviour
 {
     public int startingHealth = 100; // initial health
     [HideInInspector] public int currentHealth; // health changes if taken damage

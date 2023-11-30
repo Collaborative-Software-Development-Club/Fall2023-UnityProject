@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class HealthUIScript : MonoBehaviour
 {
     public GameObject healthBar;
-    public PlayerHeath pHealth;
+    public PlayerHealth pHealth;
     private Slider _healthSlider;
     void Start() {
         _healthSlider = healthBar.GetComponent<Slider>();
