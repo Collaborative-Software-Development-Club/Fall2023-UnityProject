@@ -12,7 +12,7 @@ public class AgentMovement : MonoBehaviour
     public float pathfindingDelay = 0.2f;
     public float targetShootingBound =  3f; // when target is within this bound, shoot
     public float targetRetreatBound = 3f; // when target gets to this value, retreat
-    public Transform playerTransform;
+    private Transform playerTransform;
     public float distanceBuffer = 0.2f;
     public float maxDistance = 15f;
     private float _updateDeadline = 0f;
@@ -23,6 +23,10 @@ public class AgentMovement : MonoBehaviour
     public float bulletSpeed = 10f;
     private bool _canShoot = true;
     public AudioSource bulletSound;
+
+    void Start() {
+        playerTransform = GameObject.Find("Player").transform;
+    }
 
     void Update() {
         float distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);

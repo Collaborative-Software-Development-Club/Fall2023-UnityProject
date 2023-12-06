@@ -20,11 +20,6 @@ public class EnemyHealth : MonoBehaviour
             currentHealth -= damageAmount;
             lastDamageTime = Time.time;
             Debug.Log("Damaged enemy, " + currentHealth + " health left");
-            if (currentHealth <= 0)
-            {
-                Destroy(gameObject);
-                Debug.Log("Killed enemy");
-            }
         }
     }
     private void OnCollisionEnter(Collision col)
