@@ -16,6 +16,7 @@ public class WaveSystemScript : MonoBehaviour
     public struct Wave {
         public int numEnemyOne;
     }
+    public int enemyKilled = 0;
 
     void Start() {
         waves = new List<Wave>();
@@ -42,6 +43,7 @@ public class WaveSystemScript : MonoBehaviour
         foreach(GameObject enemyToRemove in enemiesToRemove) {
             enemies.Remove(enemyToRemove);
             Destroy(enemyToRemove);
+            enemyKilled++;
         }
         if (enemies.Count == 0 && !isInit && currWave != waves.Count) {
             enemiesToRemove.Clear();
