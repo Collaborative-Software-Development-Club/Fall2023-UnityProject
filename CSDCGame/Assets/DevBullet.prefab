@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9ec06dec6e3f5d24eb194f7b78463173, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -117,6 +117,7 @@ GameObject:
   - component: {fileID: 6227537156714075924}
   - component: {fileID: 6469125771451325815}
   - component: {fileID: -3501446035940189786}
+  - component: {fileID: 1545652881287846135}
   m_Layer: 0
   m_Name: DevBullet
   m_TagString: Projectile
@@ -134,7 +135,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3031414483080225757}
@@ -200,3 +201,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0405647e67b8e948a323d2440e3e053, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1545652881287846135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7293466657194045248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 85ef0f6510956ab46ba346896eab4358, type: 2}
