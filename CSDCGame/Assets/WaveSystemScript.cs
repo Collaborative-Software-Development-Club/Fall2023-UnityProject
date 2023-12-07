@@ -29,6 +29,10 @@ public class WaveSystemScript : MonoBehaviour
         Wave two = new();
         two.numEnemyOne = 5;
         waves.Add(two);
+
+        Wave three = new();
+        three.numEnemyOne = 7;
+        waves.Add(three);
     }
 
     void Update()
