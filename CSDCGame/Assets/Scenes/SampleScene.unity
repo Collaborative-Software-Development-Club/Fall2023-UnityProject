@@ -29272,7 +29272,6 @@ MonoBehaviour:
   - {fileID: 1482754570}
   - {fileID: 80846772}
   - {fileID: 915291481}
-  - {fileID: 1613501390}
   currWave: 0
 --- !u!1 &1627272892
 GameObject:
