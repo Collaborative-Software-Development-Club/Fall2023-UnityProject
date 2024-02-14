@@ -55,35 +55,46 @@ public class Firearm : MonoBehaviour
 
     void Start() {
         w = new Weapon();
-        switch (fireType) {
-            case FireType.Single:
-            w.reloadTime = 1.25f;
-            w.capacity = 7;
-            w.projectileSpeed = 30;
-            w.cooldown = 0.5f;
-            break;
-            case FireType.Burst3:
-            w.reloadTime = 2;
-            w.capacity = 5;
-            w.projectileSpeed = 10;
-            w.cooldown = 1;
-            break;
-            case FireType.Auto:
-            w.reloadTime = 2f;
-            w.capacity = 20;
-            w.projectileSpeed = 20;
-            w.cooldown = 0.2f;
-            break;
-            default:
-            break;
-        }
-        projectilesRemaining = w.capacity;
-        globalCapacity = w.capacity;
+        switchGunProperties(fireType);
     }
 
 // helper method 
 public double RPMtoCooldown(double rpm) {
     return rpm / 60 / 60; 
+}
+
+private void switchGunProperties(FireType type) {
+    switch (type) {
+            case FireType.Single:
+            fireType = FireType.Single;
+            w.reloadTime = 1.25f;
+            w.capacity = 7;
+            w.projectileSpeed = 30;
+            w.cooldown = 0.5f;
+            globalCapacity = w.capacity;
+            projectilesRemaining = w.capacity;
+            break;
+            case FireType.Burst3:
+            fireType = FireType.Burst3;
+            w.reloadTime = 2;
+            w.capacity = 5;
+            w.projectileSpeed = 10;
+            w.cooldown = 1;
+            globalCapacity = w.capacity;
+            projectilesRemaining = w.capacity;
+            break;
+            case FireType.Auto:
+            fireType = FireType.Auto;
+            w.reloadTime = 2f;
+            w.capacity = 20;
+            w.projectileSpeed = 20;
+            w.cooldown = 0.2f;
+            globalCapacity = w.capacity;
+            projectilesRemaining = w.capacity;
+            break;
+            default:
+            break;
+        }
 }
 
 void Update() {
@@ -104,6 +115,18 @@ void Update() {
         {
             Reload();
             reload.Play();
+        }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.E)) {
+            reload.Play();
+            if (fireType == FireType.Single) {
+                switchGunProperties(FireType.Burst3);
+            }
+            else if (fireType == FireType.Burst3) {
+                switchGunProperties(FireType.Auto);
+            }
+            else {
+                switchGunProperties(FireType.Single);
+            }
         }
 }
 
